@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.com/BoShurik/ApiBundle.svg?branch=master)](https://travis-ci.com/BoShurik/ApiBundle)
 
+Set of useful services for building API
+
 ## Installation
 
 #### Composer

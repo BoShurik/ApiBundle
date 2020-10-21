@@ -1,5 +1,6 @@
 {
     "name": "boshurik/api-bundle",
+    "description": "Set of useful services for building API",
     "type": "library",
     "license": "MIT",
     "authors": [
