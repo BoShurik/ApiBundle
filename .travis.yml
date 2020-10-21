@@ -1,0 +1,16 @@
+language: php
+
+matrix:
+    include:
+        - php: 7.4
+          env: COMPOSER_PARAMETERS="--prefer-lowest"
+        - php: 7.4
+        - php: nightly
+    allow_failures:
+        - php: nightly
+
+
+before_script:
+    - composer update --prefer-stable --no-interaction $COMPOSER_PARAMETERS
+
+script: composer checks

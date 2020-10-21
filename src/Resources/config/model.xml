@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="BoShurik\ApiBundle\Model\ArgumentResolver\ModelArgumentResolver">
+            <argument type="service" id="Symfony\Component\Serializer\SerializerInterface"/>
+            <argument type="service" id="Symfony\Component\Serializer\Normalizer\DenormalizerInterface"/>
+            <argument type="service" id="Symfony\Component\Validator\Validator\ValidatorInterface"/>
+            <tag name="controller.argument_value_resolver"/>
+        </service>
+    </services>
+
+</container>
