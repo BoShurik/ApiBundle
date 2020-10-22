@@ -61,7 +61,7 @@ abstract class AbstractModelArgumentResolver implements ArgumentValueResolverInt
         /** @var string[] $validationGroups */
         $validationGroups = $request->attributes->get('validation_groups', []);
         if ($model instanceof ValidationGroupsAwareInterface) {
-            $validationGroups = array_unique(array_merge($validationGroups, $model->getValidationGroups()));
+            $validationGroups = array_unique(array_merge($validationGroups, $model->validationGroups()));
         }
         if (empty($validationGroups)) {
             $validationGroups = null;

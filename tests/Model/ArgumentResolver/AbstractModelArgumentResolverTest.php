@@ -250,13 +250,13 @@ class AbstractModelArgumentResolverTest extends TestCase
             $this->createMock(ConstraintViolationInterface::class),
         ]), true];
         yield [new class() implements ValidationGroupsAwareInterface {
-            public function getValidationGroups(): array
+            public function validationGroups(): array
             {
                 return ['test'];
             }
         }, [], ['test'], $this->createViolations(), false];
         yield [new class() implements ValidationGroupsAwareInterface {
-            public function getValidationGroups(): array
+            public function validationGroups(): array
             {
                 return ['test'];
             }

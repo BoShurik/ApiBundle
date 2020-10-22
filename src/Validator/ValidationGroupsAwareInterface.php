@@ -16,5 +16,5 @@ interface ValidationGroupsAwareInterface
     /**
      * @return string[]
      */
-    public function getValidationGroups(): array;
+    public function validationGroups(): array;
 }
