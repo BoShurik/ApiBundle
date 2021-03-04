@@ -43,7 +43,6 @@
         "cs-fix": "vendor/bin/php-cs-fixer fix --allow-risky=yes --diff --ansi",
         "psalm": "vendor/bin/psalm",
         "checks": [
-            "@cs-check",
             "@psalm",
             "@test"
         ]
