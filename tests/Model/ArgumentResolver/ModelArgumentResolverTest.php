@@ -67,6 +67,7 @@ class ModelArgumentResolverTest extends TestCase
     {
         yield [new Request(), $this->createArgumentMetadata('SomeModel'), true];
         yield [new Request(), $this->createArgumentMetadata('ModelModel'), true];
+        yield [new Request(), $this->createArgumentMetadata('ModelModelMapper'), false];
         yield [new Request(), $this->createArgumentMetadata('Model'), false];
         yield [new Request(), $this->createArgumentMetadata('SomeEntity'), false];
         yield [new Request(), $this->createArgumentMetadata(null), false];

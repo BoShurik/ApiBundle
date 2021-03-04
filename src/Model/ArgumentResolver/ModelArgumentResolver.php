@@ -41,8 +41,6 @@ class ModelArgumentResolver extends AbstractModelArgumentResolver
         $parts = explode('\\', $type);
         $class = array_pop($parts);
 
-        $pos = strrpos($class, $this->suffix);
-
-        return $pos !== 0 && $pos !== false;
+        return (int) preg_match(sprintf('/^.+?%s$/', $this->suffix), $class, $matches) > 0;
     }
 }
