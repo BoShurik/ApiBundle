@@ -5,9 +5,7 @@ matrix:
         - php: 7.4
           env: COMPOSER_PARAMETERS="--prefer-lowest"
         - php: 7.4
-        - php: nightly
-    allow_failures:
-        - php: nightly
+        - php: 8.0
 
 
 before_script:
