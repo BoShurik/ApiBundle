@@ -295,7 +295,8 @@ class AbstractModelArgumentResolverTest extends TestCase
     {
         return new Request([], $post, $attributes, [], [], [
             'REQUEST_METHOD' => 'POST',
-        ]);
+            'CONTENT_TYPE' => 'application/x-www-form-urlencoded',
+        ], http_build_query($post));
     }
 
     private function createJsonRequest(string $content, array $attributes = [])

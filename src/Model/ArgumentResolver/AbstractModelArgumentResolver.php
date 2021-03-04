@@ -38,13 +38,13 @@ abstract class AbstractModelArgumentResolver implements ArgumentValueResolverInt
         /** @psalm-var class-string */
         $type = $argument->getType();
 
-        if ($request->getMethod() == 'GET') {
+        if ($request->getMethod() === 'GET') {
             $model = $this->denormalizer->denormalize($request->query->all(), $type);
         } else {
-            if (!$content = $request->getContent()) {
+            if ($request->getContentType() === 'form') {
                 $model = $this->denormalizer->denormalize($request->request->all(), $type);
             } else {
-                $model = $this->serializer->deserialize($content, $type, 'json');
+                $model = $this->serializer->deserialize($request->getContent(), $type, 'json');
             }
         }
 
