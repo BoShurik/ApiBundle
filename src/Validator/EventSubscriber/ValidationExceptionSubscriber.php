@@ -14,6 +14,7 @@ namespace BoShurik\ApiBundle\Validator\EventSubscriber;
 use BoShurik\ApiBundle\Validator\Exception\ValidationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 
@@ -43,8 +44,10 @@ class ValidationExceptionSubscriber implements EventSubscriberInterface
         }
 
         $response = new JsonResponse([
-            'errors' => $errors,
-        ], 400);
+            'error' => [
+                'errors' => $errors,
+            ],
+        ], Response::HTTP_BAD_REQUEST);
 
         $event->setResponse($response);
         $event->stopPropagation();
