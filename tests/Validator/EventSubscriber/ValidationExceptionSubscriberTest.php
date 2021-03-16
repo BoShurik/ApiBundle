@@ -61,7 +61,7 @@ class ValidationExceptionSubscriberTest extends TestCase
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertSame(400, $response->getStatusCode());
         $this->assertJson($response->getContent());
-        $this->assertSame('{"errors":{"path.to.field":"message"}}', $response->getContent());
+        $this->assertSame('{"error":{"errors":{"path.to.field":"message"}}}', $response->getContent());
         $this->assertTrue($event->isPropagationStopped());
     }
 
