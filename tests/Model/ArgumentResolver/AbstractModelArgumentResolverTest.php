@@ -13,12 +13,14 @@ namespace BoShurik\ApiBundle\Tests\Model\ArgumentResolver;
 
 use BoShurik\ApiBundle\Model\ArgumentResolver\AbstractModelArgumentResolver;
 use BoShurik\ApiBundle\Model\ArgumentResolver\ModelArgumentResolver;
+use BoShurik\ApiBundle\Model\Exception\UnexpectedValueException;
 use BoShurik\ApiBundle\Validator\Exception\ValidationException;
 use BoShurik\ApiBundle\Validator\ValidationGroupsAwareInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException as SerializerUnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\ConstraintViolationInterface;
@@ -137,6 +139,25 @@ class AbstractModelArgumentResolverTest extends TestCase
 
         $this->assertNull($generator->current());
         $this->assertSame($expected, $model);
+    }
+
+    public function testNotResolvableValue()
+    {
+        $request = $this->createJsonRequest('', [
+            'validation' => false,
+        ]);
+
+        $this->serializer
+            ->expects($this->once())
+            ->method('deserialize')
+            ->with('', \stdClass::class, 'json')
+            ->willThrowException(new SerializerUnexpectedValueException('message', 256))
+        ;
+
+        $this->expectExceptionObject(new UnexpectedValueException('message', 256));
+
+        $generator = $this->argumentResolver->resolve($request, $this->createArgumentMetadata());
+        $generator->current();
     }
 
     public function testModifiedId()

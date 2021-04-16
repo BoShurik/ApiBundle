@@ -11,11 +11,13 @@
 
 namespace BoShurik\ApiBundle\Model\ArgumentResolver;
 
+use BoShurik\ApiBundle\Model\Exception\UnexpectedValueException;
 use BoShurik\ApiBundle\Validator\Exception\ValidationException;
 use BoShurik\ApiBundle\Validator\ValidationGroupsAwareInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException as SerializerUnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -38,14 +40,18 @@ abstract class AbstractModelArgumentResolver implements ArgumentValueResolverInt
         /** @psalm-var class-string */
         $type = $argument->getType();
 
-        if ($request->getMethod() === 'GET') {
-            $model = $this->denormalizer->denormalize($request->query->all(), $type);
-        } else {
-            if ($request->getContentType() === 'form') {
-                $model = $this->denormalizer->denormalize($request->request->all(), $type);
+        try {
+            if ($request->getMethod() === 'GET') {
+                $model = $this->denormalizer->denormalize($request->query->all(), $type);
             } else {
-                $model = $this->serializer->deserialize($request->getContent(), $type, 'json');
+                if ($request->getContentType() === 'form') {
+                    $model = $this->denormalizer->denormalize($request->request->all(), $type);
+                } else {
+                    $model = $this->serializer->deserialize($request->getContent(), $type, 'json');
+                }
             }
+        } catch (SerializerUnexpectedValueException $exception) {
+            throw new UnexpectedValueException($exception->getMessage(), (int) $exception->getCode(), $exception);
         }
 
         if (\is_object($model) && property_exists($model, 'id') && $request->attributes->has('id')) {

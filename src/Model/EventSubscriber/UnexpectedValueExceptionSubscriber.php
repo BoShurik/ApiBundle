@@ -9,16 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace BoShurik\ApiBundle\Validator\EventSubscriber;
+namespace BoShurik\ApiBundle\Model\EventSubscriber;
 
-use BoShurik\ApiBundle\Validator\Exception\ValidationException;
+use BoShurik\ApiBundle\Model\Exception\UnexpectedValueException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\Validator\ConstraintViolationInterface;
 
-class ValidationExceptionSubscriber implements EventSubscriberInterface
+class UnexpectedValueExceptionSubscriber implements EventSubscriberInterface
 {
     /**
      * {@inheritDoc}
@@ -33,19 +32,13 @@ class ValidationExceptionSubscriber implements EventSubscriberInterface
     public function onException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
-        if (!$exception instanceof ValidationException) {
+        if (!$exception instanceof UnexpectedValueException) {
             return;
-        }
-
-        $errors = [];
-        /** @var ConstraintViolationInterface $violation */
-        foreach ($exception->getViolations() as $violation) {
-            $errors[$violation->getPropertyPath()] = $violation->getMessage();
         }
 
         $response = new JsonResponse([
             'error' => [
-                'errors' => $errors,
+                'message' => 'Bad request',
             ],
         ], Response::HTTP_BAD_REQUEST);
 
